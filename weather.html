@@ -1,0 +1,129 @@
+<style>
+    @import url('https://fonts.googleapis.com/css?family=Laila');
+    body{
+        background-color:darkgray;
+        
+    }
+
+    #submit{
+        background-color:blue;
+        color: white;
+        width: 29%;
+        height: 9%;
+        font-family: 'Laila', sans-serif;
+
+       
+    }
+    #input{
+        width: 25%;
+        height: 9%;
+        text-align: center;
+        background-color:floralwhite;
+        font-family: 'Laila', sans-serif;
+
+    }
+    #hola{
+        display: flex;
+        flex-direction: column;
+        align-items:center;
+        font-family: 'Laila', sans-serif;
+
+    }
+    #content{
+        font-family: 'Laila', sans-serif;
+        text-align: center;
+
+    }
+    #content h2{
+        font-size: 40px;
+    }
+</style>
+<!Doctype html>
+<html>
+	<head >
+	
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<script src="http://code.jquery.com/jquery-2.1.4.min.js" ></script>
+		<script src="js/script.js" ></script>	
+		<title>El Tiempo</title>
+	
+	</head> 
+	<body>
+
+		<div class="header">
+			
+			
+			
+			<div id="hola">
+			<h1>Introduzca una ciudad de España</h1>
+			<input type="text" id="input">
+                <br>
+			<button type="button" id="submit">Ver el tiempo</button> 
+            </div>
+		</div>
+		
+		<div id="content" class="weather-list">
+	
+		</div>
+	
+	</body>	
+</html>
+<script>
+$(document).ready(function(){
+	$('#submit').click(function(){
+	
+
+
+		var cityName=$('#input').val();
+		var weatherURL="http://api.openweathermap.org/data/2.5/weather?q="+cityName+",es&appid=1ebe8fb6c5d2654d9ceb6e243540f115";
+
+
+		console.log(weatherURL);
+
+
+
+		$.ajax({
+			url:weatherURL,
+			success:function(result){
+				console.log(result);
+
+				var html;
+				
+			
+				
+			
+					var wind = result.wind;
+						var main = result.main;
+                        var sys = result.sys;
+                        	var coord = result.coord;
+						html =
+							'<div>' +
+							'<div><b>Temperatura:</b> ' + (main.temp-273.15) + ' ºC' + '</div>' +
+							'<div><b>Presion:</b> ' + main.pressure + ' (hPa)' + '</div>' +
+							'<div><b>Orientacion del viento:</b> ' + wind.deg + 'º' + '</div>' +
+							'<div><b>Velocidad viento:</b> ' + wind.speed + '(Km/h)' + '</div>' +
+                             '<div><b>Tiempo de amanecer:</b>' + (sys.sunset-273) + '</div>' +
+                            '<div><b>Tiempo de atardecer:</b>' + (sys.sunrise-273) + '</div>' +
+							'<div><b>Pais:</b> ' + sys.country + '</div>' +					 
+							'<div><b>Longitud:</b> ' + coord.lon + '</div>' +
+							'<div><b>Latitud:</b> ' + coord.lat + '</div>' +
+							'</div>';
+						  		
+					
+				$('#content').prepend(
+					'<article class="weather">' +
+					'	<h2>' + result.name + '</h2>' +
+					'	<div class="weather-main">' +
+							html +
+					'	</div>' +
+					'</article>'
+
+				);
+			}		
+		})
+	})
+});
+</script>
+
+
